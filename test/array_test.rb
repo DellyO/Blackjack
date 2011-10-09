@@ -2,32 +2,20 @@ require './array'
 require 'test/unit'
 
 class ArrayTest < Test::Unit::TestCase
-  def test_soft
-    assert [11,11].soft?
-    assert [10,11].soft?
-    assert [9,11].soft?
-    assert [8,11].soft?
-    assert [7,11].soft?
-    assert [6,11].soft?
-    assert [5,11].soft?
-    assert [4,11].soft?
-    assert [3,11].soft?
-    assert [2,11].soft?
-    assert ![2,11,10].soft?
-    assert ![2,11,9].soft?
-    assert ![2,11,8].soft?
-    assert [2,11,7].soft?
-    assert [2,11,6].soft?
-    assert [2,11,5].soft?
-    assert [2,11,4].soft?
-    assert [2,11,3].soft?
-    assert [2,11,2].soft?
-  end
-
-  def test_pair
-  end
-
   def test_blackjack_value
-    assert_equal [10,11].blackjack_value, 21
+    assert_blackjack_value [5,6], 11
+    assert_blackjack_value [9,6], 15
+    assert_blackjack_value [10,10], 20
+    assert_blackjack_value [10,11], 21
+    assert_blackjack_value [11,5,9], 15
+    assert_blackjack_value [11,11,4], 16
+    assert_blackjack_value [11,11], 12
+    assert_blackjack_value [10,10,2], 22
+    assert_blackjack_value [10,11,2], 13
+    assert_blackjack_value [10,10,11,2], 23
+  end
+
+  def assert_blackjack_value arr, expected
+    assert_equal expected, arr.blackjack_value!
   end
 end
