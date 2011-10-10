@@ -2,6 +2,11 @@ require './array'
 require 'test/unit'
 
 class ArrayTest < Test::Unit::TestCase
+  def test_pair
+    assert [3,3].pair?
+    assert ![3,5].pair?
+  end
+
   def test_blackjack_value
     assert_blackjack_value [5,6], 11
     assert_blackjack_value [9,6], 15
