@@ -1,6 +1,32 @@
-# Strategy function to determine hit/stand/split/double/surrender
-module Strategy
-  def self.action hand, dealer, opts = {}
+#
+# Strategy
+#
+# - determines action to take (hit/stand/split/double/surrender)
+# - counts the cards
+#
+class Strategy
+  attr_reader :count
+
+  def initialize
+    @count = 0
+  end
+
+  def count_card card
+    case card
+    when 1, 10, 11 then @count += -1
+    when 2, 3, 4, 5, 6 then @count += 1
+    when 7, 8, 9 then @count += 0
+    end
+
+    puts @count
+    @count
+  end
+
+  def reset_count
+    @count = 0
+  end
+
+  def determine_action hand, dealer, opts = {}
     return 'HIT' if hand <= 8 && !opts['pair']
     return 'STAND' if hand >= 19
     case hand
