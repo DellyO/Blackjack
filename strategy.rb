@@ -12,13 +12,7 @@ class Strategy
   end
 
   def count_card card
-    case card
-    when 1, 10, 11 then @count += -1
-    when 2, 3, 4, 5, 6 then @count += 1
-    when 7, 8, 9 then @count += 0
-    end
-
-    @count
+    @count += CONFIG[card]
   end
 
   def reset_count
