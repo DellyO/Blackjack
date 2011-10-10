@@ -4,7 +4,7 @@ class Array
   end
 
   def pair?
-    size == 2 && [0] == [1]
+    size == 2 && self[0] == self[1]
   end
 
   def blackjack_value!

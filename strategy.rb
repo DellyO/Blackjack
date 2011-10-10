@@ -18,7 +18,6 @@ class Strategy
     when 7, 8, 9 then @count += 0
     end
 
-    puts @count
     @count
   end
 
