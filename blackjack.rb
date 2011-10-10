@@ -3,23 +3,18 @@
 
 require './strategy'
 require './array'
+require 'yaml'
 
 # Initialize the deck
 DECK = [2,3,4,5,6,7,8,9,10,10,10,10,11,2,3,4,5,6,7,8,9,10,10,10,10,11,2,3,4,5,6,7,8,9,10,10,10,10,11,2,3,4,5,6,7,8,9,10,10,10,10,11]
+CONFIG = YAML.load_file("config.yml")
 
-number_of_decks = 6 # Initialize number of decks
-shoe = DECK * number_of_decks # Initialize the shoe
-@budget = 1000000 # Initialize starting @budget
-bet = 10 # Initialize bet, can be changed later
+shoe = DECK * CONFIG['decks'] # Initialize the shoe
 penetration_number = shoe.size * 0.25 # Initialize deck penetration
-@blackjack_payout = 1.5 # Initialize blackjack payouts
-simulations = 1000 # Initialize number of simulations
+@budget = CONFIG['budget'] # Initialize starting @budget
+bet = 10 # Initialize bet, can be changed later
 true_count = 0 # Initialize true count
-@minimum_bet = 10
 @strategy = Strategy.new
-
-# Initialize how much to increase bets based on count
-bet_count_multiplier = 1
 
 def deal_card shoe
   card = shoe.pop
@@ -30,7 +25,7 @@ end
 def play_hand player_hand, dealer_hand, bet, shoe
   if player_hand.blackjack_value! == 21
     # If player has blackjack, win bet times blackjack payout
-    @budget = @budget + bet * @blackjack_payout
+    @budget = @budget + bet * CONFIG['blackjack_payout']
   end
   
   action = @strategy.determine_action(player_hand.blackjack_value!, dealer_hand[1], {'soft' => player_hand.soft?, 'pair' => player_hand.pair?})
@@ -50,14 +45,8 @@ def play_hand player_hand, dealer_hand, bet, shoe
       bet /= 2
       break
     when 'SPLIT'
-      one = []
-      two = []
-      one << player_hand[0]
-      two << player_hand[1]
-      one << deal_card(shoe)
-      two << deal_card(shoe)
-      play_hand one, dealer_hand, bet, shoe
-      play_hand two, dealer_hand, bet, shoe
+      play_hand [player_hand[0], deal_card(shoe)], dealer_hand, bet, shoe
+      play_hand [player_hand[1], deal_card(shoe)], dealer_hand, bet, shoe
       # TODO: player can't hit after splitting aces
       return
     when 'STAND'
@@ -85,7 +74,7 @@ def play_hand player_hand, dealer_hand, bet, shoe
 end
 
 # Run through as many shoes as there are simulations
-simulations.times do
+CONFIG['simulations'].times do
 	shoe = (DECK * 6).shuffle # Refresh/create the shoe and shuffle
   @strategy.reset_count
 
@@ -98,9 +87,9 @@ simulations.times do
     # Calculate the true count by dividing running count by decks remaining
     true_count = @strategy.count / (shoe.size / 52)
     # Increase bet based on true count
-    bet = bet * bet_count_multiplier
-    if bet < @minimum_bet
-      bet = @minimum_bet
+    bet = bet * CONFIG['bet_multiplier']
+    if bet < CONFIG['minimum_bet']
+      bet = CONFIG['minimum_bet']
     end
 
     # Deal two cards to each
@@ -122,9 +111,7 @@ simulations.times do
     end
     
     play_hand player_hand, dealer_hand, bet, shoe
-       
   end
 end
 
-puts 
-puts "Ending @budget is $#{@budget}"
+puts "Ending budget is $#{@budget}"

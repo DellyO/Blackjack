@@ -1,0 +1,11 @@
+# Blackjack Rules
+decks: 6
+minimum_bet: 10
+blackjack_payout: 1.5
+
+# Simulation variables
+budget: 1000000
+bet_multiplier: 1
+simulations: 1000
+penetration_percentage: 0.25
+
