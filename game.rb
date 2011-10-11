@@ -7,6 +7,25 @@ class Game
     @player_hands = []
   end
 
+  def play_hand shoe, bet
+    @player_hands.clear
+    @player_hands[0], dealer = deal_cards shoe, bet
+
+    # Check for blackjacks
+    return 0 if dealer.blackjack? && @player_hands[0].blackjack?
+    return -@player_hands[0].bet if dealer.blackjack?
+    return (@player_hands[0].bet * CONFIG['blackjack_payout']) if @player_hands[0].blackjack?
+
+    alive = execute(@player_hands[0], dealer, shoe)
+
+    profit = 0
+    @player_hands.each do |player|
+      profit += calculate_results player, dealer, shoe, alive
+    end
+    profit
+  end
+
+  private
   def deal_card shoe
     card = shoe.pop
     @strategy.count_card(card)
@@ -73,24 +92,6 @@ class Game
     end
 
     return false
-  end
-
-  def play_hand shoe, bet
-    @player_hands.clear
-    @player_hands[0], dealer = deal_cards shoe, bet
-
-    # Check for blackjacks
-    return 0 if dealer.blackjack? && @player_hands[0].blackjack?
-    return -@player_hands[0].bet if dealer.blackjack?
-    return (@player_hands[0].bet * CONFIG['blackjack_payout']) if @player_hands[0].blackjack?
-
-    alive = execute(@player_hands[0], dealer, shoe)
-
-    profit = 0
-    @player_hands.each do |player|
-      profit += calculate_results player, dealer, shoe, alive
-    end
-    profit
   end
 end
 
