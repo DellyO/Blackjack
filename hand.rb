@@ -1,5 +1,10 @@
 require 'forwardable'
 
+#
+# Hand
+#
+# - a players cards along with the bet associated with it
+#
 class Hand
   extend Forwardable
 

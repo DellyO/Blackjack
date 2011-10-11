@@ -1,6 +1,11 @@
 require './strategy'
 require './hand'
 
+#
+# Game
+#
+# - executes a round of blackjack with a given strategy
+#
 class Game
   def initialize strategy = Strategy.new
     @strategy     = strategy
