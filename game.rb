@@ -31,26 +31,21 @@ class Game
     end
 
     if player.bust?
-      #puts "LOSE"
       return -player.bet
     elsif dealer.bust?
-      #puts "WIN"
       return player.bet
     elsif dealer.value! > player.value!
-      #puts "LOSE"
       return -player.bet
     elsif player.value! > dealer.value!
-      #puts "WIN"
       return player.bet
     end
     return 0
   end
 
   def execute player, dealer, shoe
-    action = @strategy.determine_action(player.value!, dealer[1], {'soft' => player.soft?, 'pair' => player.pair?})
-
-    #puts "action:#{action}\tplayer:#{@player_hands.inspect}\tdealer:#{dealer}\tbet:#{@player_hands.collect(&:bet)}"
     while !player.bust?
+      action = @strategy.determine_action(player.value!, dealer[1], {'soft' => player.soft?, 'pair' => player.pair?})
+      #puts "action:#{action}\tplayer:#{@player_hands.inspect}\tdealer:#{dealer}\tbet:#{@player_hands.collect(&:bet)}"
       case action
       when 'HIT'
         player << deal_card(shoe)
@@ -75,7 +70,6 @@ class Game
       when 'STAND'
         return true
       end
-      action = @strategy.determine_action(player.value!, dealer[1], {'soft' => player.soft?, 'pair' => player.pair?})
     end
 
     return false
