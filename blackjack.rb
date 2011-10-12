@@ -5,6 +5,7 @@ require './strategy'
 require './game'
 require 'yaml'
 
+start = Time.now
 # Initialize the deck
 DECK = [2,3,4,5,6,7,8,9,10,10,10,10,11,2,3,4,5,6,7,8,9,10,10,10,10,11,2,3,4,5,6,7,8,9,10,10,10,10,11,2,3,4,5,6,7,8,9,10,10,10,10,11]
 CONFIG = YAML.load_file("config.yml")
@@ -33,5 +34,7 @@ CONFIG['simulations'].times do
     budget += Game.new(strategy).play_hand(shoe, bet)
   end
 end
-
+puts "Simulations: #{CONFIG['simulations']}"
 puts "Ending budget is $#{budget}"
+finish = Time.now - start
+puts "Total run time: #{finish}"
