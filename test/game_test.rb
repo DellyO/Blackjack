@@ -44,6 +44,7 @@ class GameTest < Test::Unit::TestCase
     assert_equal -20, Game.new.play_hand(construct_shoe([8,8,10,10],[6,6,7]), 10)
     assert_equal 0, Game.new.play_hand(construct_shoe([8,8,10,7],[6,6,5]), 10)
     assert_equal 30, Game.new.play_hand([10,7,7,7,8,6,8,6,8], 10)
+    assert_equal 0, Game.new.play_hand(construct_shoe([11,11,10,2],[6,6,5]), 10)
   end
 
   private

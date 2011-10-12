@@ -47,7 +47,7 @@ class Game
     return player, dealer
   end
 
-  def calculate_results player, dealer, shoe, alive
+  def calculate_results player, dealer, shoe, alive = true
     return -player.bet unless alive
 
     while dealer.value! < 17
@@ -87,10 +87,15 @@ class Game
         @player_hands.delete player
         @player_hands << Hand.new([player[0], deal_card(shoe)], player.bet)
         @player_hands << Hand.new([player[1], deal_card(shoe)], player.bet)
-        execute(@player_hands[-1], dealer, shoe)
-        execute(@player_hands[-2], dealer, shoe)
+        if player.soft?
+          # Skip to calculation if aces were split
+          calculate_results @player_hands[-1], dealer, shoe
+          calculate_results @player_hands[-2], dealer, shoe
+        else
+          execute @player_hands[-1], dealer, shoe
+          execute @player_hands[-2], dealer, shoe
+        end
         return true
-        # TODO: player can't hit after splitting aces
       when 'STAND'
         return true
       end

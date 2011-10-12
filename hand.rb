@@ -9,19 +9,21 @@ class Hand
   extend Forwardable
 
   attr_accessor :bet
-  def_delegators :@cards, :[], :[]=, :<<, :inject, :size, :include?, :find_index, :to_s
+  def_delegators :@cards, :[], :[]=, :<<, :size, :to_s
 
   def initialize cards, bet = 0
+    cards[cards.find_index(1)] = 11 if cards.include?(1)
     @cards = cards
     @bet = bet
   end
 
   def soft?
-    include? 11
+    @cards.include? 11
   end
 
   def pair?
-    size == 2 && self[0] == self[1]
+    return true if @cards.size == 2 && @cards.include?(11) && @cards.include?(1)
+    @cards.size == 2 && @cards[0] == @cards[1]
   end
 
   def blackjack?
@@ -33,9 +35,9 @@ class Hand
   end
 
   def value!
-    value = inject(0){|acc,c| acc + c}
+    value = @cards.inject(0){|acc,c| acc + c}
     if soft? && value > 21
-      self[find_index(11)] = 1
+      @cards[@cards.find_index(11)] = 1
       return value!
     end
     value
