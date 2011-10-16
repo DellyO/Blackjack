@@ -69,7 +69,8 @@ class Game
   def execute player, dealer, shoe
     while !player.bust?
       action = @strategy.determine_action(player.value!, dealer[1], {'soft' => player.soft?, 'pair' => player.pair?})
-      #puts "action:#{action}\tplayer:#{@player_hands.inspect}\tdealer:#{dealer}\tbet:#{@player_hands.collect(&:bet)}"
+      # puts "#{action}\tP:#{@player_hands.inspect}\tD:#{dealer}\tBet:#{@player_hands.collect(&:bet)}\tBudget:#{@budget}"
+#!! Line not working:  puts "#{budget}, #{@count}, #{@player_hands.collect(&:bet)}" 
       case action
       when 'HIT'
         player << deal_card(shoe)
