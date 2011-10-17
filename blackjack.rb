@@ -19,7 +19,9 @@ penetration_number = shoe.size * 0.25 # Initialize deck penetration
 budget = CONFIG['budget'] # Initialize starting budget
 starting_budget = CONFIG['budget']
 strategy = Strategy.new
-
+lines = []
+resultsFile = File.open("output.txt", "w+")
+resultsFile << "true_count, budget, bet \n"
 # Run through as many shoes as there are simulations
 CONFIG['simulations'].times do
 	shoe = (DECK * 6).shuffle # Refresh/create the shoe and shuffle
@@ -37,7 +39,7 @@ CONFIG['simulations'].times do
     if bet > CONFIG['maximum_bet']
       bet = CONFIG['maximum_bet']
     end
-    puts "true count: #{true_count} budget: #{budget} bet: #{bet}"
+    resultsFile << "#{true_count}, #{budget}, #{bet} \n"
     budget += Game.new(strategy).play_hand(shoe, bet)
   end
 end

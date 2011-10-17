@@ -7,7 +7,7 @@ blackjack_payout: 1.5
 # Simulation variables
 budget: 1000000
 bet_multiplier: 1
-simulations: 1
+simulations: 10
 penetration_percentage: 0.25
 
 # Card counting values
