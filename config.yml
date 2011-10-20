@@ -9,6 +9,7 @@ budget: 1000000
 bet_multiplier: 1
 simulations: 10
 penetration_percentage: 0.25
+output: Y
 
 # Card counting values
 # Standardized Revere-RAPC

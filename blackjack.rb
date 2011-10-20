@@ -21,7 +21,8 @@ starting_budget = CONFIG['budget']
 strategy = Strategy.new
 lines = []
 resultsFile = File.open("output.txt", "w+")
-resultsFile << "true_count, budget, bet \n"
+resultsFile << "true_count, budget, bet, hand_winnings, standardized_hand_winnings\n"
+hand_winnings = 0
 # Run through as many shoes as there are simulations
 CONFIG['simulations'].times do
 	shoe = (DECK * 6).shuffle # Refresh/create the shoe and shuffle
@@ -39,8 +40,12 @@ CONFIG['simulations'].times do
     if bet > CONFIG['maximum_bet']
       bet = CONFIG['maximum_bet']
     end
-    resultsFile << "#{true_count}, #{budget}, #{bet} \n"
-    budget += Game.new(strategy).play_hand(shoe, bet)
+    hand_winnings = Game.new(strategy).play_hand(shoe, bet)
+    budget += hand_winnings
+    standardized_hand_winnings = hand_winnings / bet
+    if CONFIG['output'] = 'Y'
+      resultsFile << "#{true_count}, #{budget}, #{bet}, #{hand_winnings}, #{standardized_hand_winnings}\n"
+    end
   end
 end
 puts "Simulations: #{CONFIG['simulations']}"
